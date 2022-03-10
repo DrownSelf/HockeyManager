@@ -1,5 +1,6 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -69,6 +70,7 @@ namespace HockeyManager.Controllers
             return View();
         }
 
+        [Authorize (Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee(ChangeEmployeeRequest changeEmployeeRequest)
         {
@@ -87,6 +89,7 @@ namespace HockeyManager.Controllers
             return View(changeEmployeeRequest);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
