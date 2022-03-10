@@ -1,0 +1,22 @@
+﻿@model LogInRequest
+
+<h2>Loging in</h2>
+<div>
+    <form method="post" asp-controller="Account" asp-action="LogIn">
+        <div>
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div>
+            <label asp-for="Password"></label>
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div>
+            <input type="submit" value="Registrate" />
+        </div>
+    </form>
+</div>

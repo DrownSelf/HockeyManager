@@ -1,0 +1,25 @@
+﻿@model IQueryable<Microsoft.AspNetCore.Identity.IdentityRole>?
+
+<h2>Roles</h2>
+<a href="/Roles/Create">Create</a>
+@if (Model == null)
+{
+    <p>DB is empty</p>
+}
+else
+{
+    <table>
+        @foreach (var Role in Model)
+        {
+            <tr id="@Role.Id">
+                <td>@Role.Name</td>
+                <td>
+                    <button id="deleteRole" RoleId="@Role.Id">Delete</button>
+                </td>
+                <td>
+                    <a href="/Roles/RolesUpdate" id="storeId" storedId="@Role.Id">Update</a>
+                </td>
+            </tr>
+        }
+    </table>
+}

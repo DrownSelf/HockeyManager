@@ -1,0 +1,38 @@
+﻿@model List<HockeyManager.Models.UserRoles>
+
+<h2>Employees</h2>
+<a href="/Employee/Create">Create</a>
+@if (Model == null)
+{
+    <p>DB is empty</p>
+}
+else
+{
+    <table>
+        @foreach (var employee in Model)
+        {
+            <tr id="@employee.UserId">
+                <td>@employee.UserEmail</td>
+                <td>@employee.USDSalary</td>
+                <td> Roles
+                @foreach(var role in employee.Roles)
+                {
+                    <label>@role &nbsp;</label>
+                }
+                </td>
+
+                <td>
+                    <button id="deleteEmployee" employeeId="@employee.UserId">Delete</button>
+                </td>
+
+                <td>
+                    <a href="/Employee/Update" id="storeId" storedId="@employee.UserId">Update</a>
+                </td>
+
+                <td>
+                    <a href="/Roles/EditRoleState" id="storeId" storedId="@employee.UserId">Change Role</a> 
+                </td>
+            </tr>
+        }
+    </table>
+}

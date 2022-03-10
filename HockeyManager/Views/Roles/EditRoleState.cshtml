@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IQueryable<IdentityRole>?
+@if (Model == null)
+{
+    <h2>There aren't any roles</h2>
+}
+else
+{
+    <div>
+        @foreach (var role in Model)
+        {
+            <p>
+                <label>
+                    @role.Name
+                    <input type="checkbox" name="Roles" storedName="@role.Name"/>
+                </label>
+            </p>
+        }
+        <button id="setRoles">Send</button>
+    </div>
+}
