@@ -72,8 +72,6 @@ namespace HockeyManager.Controllers
             if (findedUser != null)
             {
                 var employeeRoles = await _userManager.GetRolesAsync(findedUser);
-                var allRoles = _roleManager.Roles;
-
                 var deletedRoles = employeeRoles.Except(setRoleRequest.Roles);
                 var addedRoles = setRoleRequest.Roles.Except(employeeRoles);
 
