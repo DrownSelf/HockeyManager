@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 string connection = builder.Configuration["ConnectionString"];
 
 builder.Services.AddMvc();
+builder.Services.AddDbContext<GeneralContext>(options =>
+    options.UseNpgsql(connection));
 builder.Services.AddIdentity<Employee, IdentityRole>()
     .AddEntityFrameworkStores<GeneralContext>();
-builder.Services.AddDbContext<GeneralContext>(options => options.UseNpgsql(connection));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

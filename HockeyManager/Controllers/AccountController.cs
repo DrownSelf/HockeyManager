@@ -34,7 +34,6 @@ namespace HockeyManager.Controllers
                 newEmployee.UserName = registerRequest.Email;
                 var result = await _userManager.CreateAsync(newEmployee, registerRequest.Password);
 
-
                 if (result.Succeeded)
                     return RedirectToAction("Index", "Home");
                 ModelState.AddModelError("", "Something wrong happened");
@@ -54,13 +53,22 @@ namespace HockeyManager.Controllers
         {
             if (ModelState.IsValid)
             {
+                var findedUser = await _userManager.FindByEmailAsync(logInRequest.Email);
                 var result = await
-                    _signInManager.PasswordSignInAsync(logInRequest.Email, logInRequest.Password, logInRequest.RememberMe, false);
+                    _signInManager.PasswordSignInAsync(findedUser, logInRequest.Password, logInRequest.RememberMe, false);
                 if (result.Succeeded)
                     return RedirectToAction("Index", "Home");
+                
                 ModelState.AddModelError("", "Wrong Email or password");
             }
             return View(logInRequest);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

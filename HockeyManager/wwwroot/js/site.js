@@ -1,5 +1,4 @@
 $("#updateEmployee").click(function () {
-    alert("JS is bad");
     var id = sessionStorage.getItem("ID");
     var salary = $("#salaryRow").val();
     var email = $("#emailRow").val();
@@ -7,44 +6,56 @@ $("#updateEmployee").click(function () {
         type: "PUT",
         url: '/Employee/UpdateEmployee',
         data: { "EmployeeId": id, "USDSalary": salary, "Email": email },
-        succes: function () {
-            alert('Act happened');
+        success: function () {
+            window.location.href = "/Employee/Manager"
         }
     });
 });
 
 $('a[id = "storeId"]').click(function () {
-    alert("Button works");
     var id = $(this).attr("storedId");
     sessionStorage.setItem("ID", id);
 });
 
 $("#deleteEmployee").click(function (){
-    alert("JS is bad");
     var EmployeeId = $(this).attr("employeeId");
     $.ajax({
         type: "DELETE",
         url: '/Employee/Delete',
         data: { "id": EmployeeId },
-        success: function (response) {
-            $("tr[id='EmployeeId']").remove();
+        success: function () {
+            $("tr[id='"+EmployeeId+"']").remove();
         },
         error: function (response) {
-            $("tr[id='EmployeeId']").remove();
-            alert("Something wrong happened");
+            alert(response.responseText);
         }
        });
 });
 
+$("#deleteRole").click(function () {
+    var RoleId = $(this).attr("RoleId");
+    $.ajax({
+        type: "DELETE",
+        url: '/Roles/DeleteRole',
+        data: { "id": RoleId },
+        success: function () {
+            $("tr[id='" + RoleId + "']").remove();
+            alert("delete works");
+        },
+        error: function () {
+            alert("bad(");
+        }
+    });
+});
+
 $("#createRole").click(function () {
-    alert("post request works");
     var name = $("#rowWithName").val();
     $.ajax({
         type: "POST",
         url: '/Roles/Create',
         data: { "name": name },
         success: function () {
-            alert("well");
+            window.location.href = "/Roles/RolesManager";
         },
         error: function () {
             alert("baad(");
@@ -52,8 +63,24 @@ $("#createRole").click(function () {
     });
 });
 
-$("#setRoles").click(function () {
+$("#setRoleName").click(function () {
     alert("button works");
+    var id = sessionStorage.getItem("ID");
+    var name = $("#getName").val();
+    $.ajax({
+        type: "PUT",
+        url: 'Roles/RolesUpdate',
+        data: { "id": id, "newName": name },
+        success: function () {
+            window.location.href = "/Roles/RolesManager";
+        },
+        error: function () {
+            alert("something wrong happened");
+        }
+    });
+});
+
+$("#setRoles").click(function () {
     var id = sessionStorage.getItem("ID");
     var acceptedRoles = new Array();
     var checkBoxes = document.getElementsByName("Roles");
@@ -68,10 +95,24 @@ $("#setRoles").click(function () {
         url: "/Roles/EditRoleState",
         data: { "UserId": id, "Roles": acceptedRoles },
         success: function () {
-            alert("yahoo");
+            window.location.href = "/Employee/Manager";
         },
         error: function () {
             alert("bad(");
+        }
+    });
+});
+
+$("#LogOutAction").click(function(){
+    $.ajax({
+        type: "POST",
+        url: "/Employee/LogOut",
+        success: function(response){
+            alert(response.responseText);
+            window.location.href = "/Home/Index";
+        },
+        error: function(response){
+            alert(response.responseText);
         }
     });
 });
