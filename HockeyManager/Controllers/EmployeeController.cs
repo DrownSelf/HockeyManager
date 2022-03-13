@@ -71,6 +71,7 @@ namespace HockeyManager.Controllers
             return View();
         }
 
+        [Authorize (Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee(ChangeEmployeeRequest changeEmployeeRequest)
         {
@@ -90,6 +91,7 @@ namespace HockeyManager.Controllers
             return View(changeEmployeeRequest);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
