@@ -21,7 +21,7 @@ namespace HockeyManager.DataLayer
             string roleId = this.SeedRole(builder);
             this.SeedUserRole(builder, userId, roleId);
         }
-        
+
         private string SeedEmployee(ModelBuilder builder)
         {
             var admin = new Employee
@@ -34,7 +34,7 @@ namespace HockeyManager.DataLayer
             admin.NormalizedUserName = admin.UserName.ToUpper();
             admin.PasswordHash = new PasswordHasher<Employee>().HashPassword(admin, "12356Ab!");
             builder.Entity<Employee>().HasData(admin);
-            
+
             return admin.Id;
         }
 

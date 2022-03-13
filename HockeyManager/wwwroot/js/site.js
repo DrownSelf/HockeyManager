@@ -7,7 +7,8 @@ $("#updateEmployee").click(function () {
         url: '/Employee/UpdateEmployee',
         data: { "EmployeeId": id, "USDSalary": salary, "Email": email },
         success: function () {
-            window.location.href = "/Employee/Manager"
+            window.location.href = "/Employee/Manager";
+            alert('Act happened');
         }
     });
 });
