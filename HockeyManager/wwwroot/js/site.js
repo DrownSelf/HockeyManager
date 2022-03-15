@@ -75,3 +75,17 @@ $("#setRoles").click(function () {
         }
     });
 });
+
+$("#LogOutAction").click(function(){
+    $.ajax({
+        type: "POST",
+        url: "/Account/LogOut",
+        success: function(response){
+            alert(response.responseText);
+            window.location.href = "/Home/Index";
+        },
+        error: function(response){
+            alert(response.responseText);
+        }
+    });
+});

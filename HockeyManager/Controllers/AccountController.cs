@@ -62,5 +62,12 @@ namespace HockeyManager.Controllers
             }
             return View(logInRequest);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
+        }
     }
 }
