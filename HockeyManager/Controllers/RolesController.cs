@@ -1,5 +1,6 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace HockeyManager.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -53,7 +55,7 @@ namespace HockeyManager.Controllers
                 findedRole.Name = newName;
                 var result = await _roleManager.UpdateAsync(findedRole);
                 if (result.Succeeded)
-                    return RedirectToAction("Roles");
+                    return Ok();
                 ModelState.AddModelError("", "Something wrong happened");
             }
             return RedirectToAction("Roles");
@@ -72,13 +74,14 @@ namespace HockeyManager.Controllers
             if (findedUser != null)
             {
                 var employeeRoles = await _userManager.GetRolesAsync(findedUser);
+
                 var deletedRoles = employeeRoles.Except(setRoleRequest.Roles);
                 var addedRoles = setRoleRequest.Roles.Except(employeeRoles);
 
                 await _userManager.AddToRolesAsync(findedUser, addedRoles);
                 await _userManager.RemoveFromRolesAsync(findedUser, deletedRoles);
 
-                return View("Roles");
+                return Ok();
             }
             return View(setRoleRequest);
         }
@@ -91,7 +94,7 @@ namespace HockeyManager.Controllers
             {
                 var result = await _roleManager.DeleteAsync(findedRole);
                 if (result.Succeeded)
-                    return RedirectToAction("Roles");
+                    return Ok();
                 ModelState.AddModelError("", "Something wrong happened");
             }
             return RedirectToAction("Roles");

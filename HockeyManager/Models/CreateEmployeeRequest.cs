@@ -4,10 +4,12 @@ namespace HockeyManager.Models
 {
     public class CreateEmployeeRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Enter Email")]
+        [EmailAddress(ErrorMessage = "Wrong input")]
+        [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Enter value(amount)")]
         [Display(Name = "Salary in USD")]
         [Range (0, int.MaxValue)]
         public int USDSalary { get; set; }
