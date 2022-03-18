@@ -1,10 +1,26 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
 <div class="text-center">
+    @if (User.IsInRole("admin"))
+    {
+        <h1 class="display-4">Home Page</h1>
+        <a href="/Employee/Manager">Manage Accounts</a>
+        <a href="/Roles/RolesManager">Manage Roles</a>
+        <button id="LogOutAction">Log out</button>
+    }
+    else
+    {
+        <h1 class="display-4">Welcome</h1>
+        <a href="/Account/Registr">Registration</a>
+        <a href="/Account/Login">Log In</a>
     <h1 class="display-4">Welcome</h1>
     <a href="/Account/Registr">Registration</a>
     <a href="/Account/Login">Log In</a>
-    <a href="/Employee/Manager">Manage Accounts</a>
-    <a href="/Roles/RolesManager">Manage Roles</a>
+    @if (User.IsInRole("admin"))
+    {
+        <a href="/Employee/Manager">Manage Accounts</a>
+        <a href="/Roles/RolesManager">Manage Roles</a>
+    }
 </div>

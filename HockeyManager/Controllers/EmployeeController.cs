@@ -1,5 +1,6 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace HockeyManager.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class EmployeeController : Controller
     {
         private readonly UserManager<Employee> _userManager;
@@ -58,7 +60,7 @@ namespace HockeyManager.Controllers
                 var result = await _userManager.CreateAsync(newEmployee, createRequest.Password);
                 if (result.Succeeded)
                     return RedirectToAction("Manager", "Employee");
-                ModelState.AddModelError("", "Something wrong happened");
+                ModelState.AddModelError("" , "Something wrong happened");
             }
             return View(createRequest);
         }
@@ -69,6 +71,7 @@ namespace HockeyManager.Controllers
             return View();
         }
 
+        [Authorize (Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee(ChangeEmployeeRequest changeEmployeeRequest)
         {
@@ -77,28 +80,40 @@ namespace HockeyManager.Controllers
                 var findedUser = await _userManager.FindByIdAsync(changeEmployeeRequest.EmployeeId);
                 if (findedUser != null)
                 {
+                    findedUser.UserName = changeEmployeeRequest.Email;
                     findedUser.Email = changeEmployeeRequest.Email;
                     findedUser.USDSallary = changeEmployeeRequest.USDSalary;
                     await _userManager.UpdateAsync(findedUser);
-                    return RedirectToAction("Manager", "Employee");
+                    return Ok();
                 }
                 ModelState.AddModelError("", "User haven't found");
             }
             return View(changeEmployeeRequest);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
-            var findedEmployee = await _userManager.FindByIdAsync(id);
-            if (findedEmployee != null)
+            try
             {
-                var result = await _userManager.DeleteAsync(findedEmployee);
-                if (result.Succeeded)
-                    return RedirectToAction("Manager", "Employee");
-                ModelState.AddModelError("", "This user is not existing");
+                var findedEmployee = await _userManager.FindByIdAsync(id);
+                if (findedEmployee != null)
+                {
+                    if (await _userManager.IsInRoleAsync(findedEmployee, "admin"))
+                        return BadRequest("You can't delete admin");
+
+                    var result = await _userManager.DeleteAsync(findedEmployee);
+                    if (result.Succeeded)
+                        return Ok();
+                    ModelState.AddModelError("", "This user is not existing");
+                }
+                return RedirectToAction("Manager", "Employee");
             }
-            return RedirectToAction("Manager", "Employee");
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -4,16 +4,17 @@ namespace HockeyManager.Models
 {
     public class LogInRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Enter Email")]
         [Display(Name = "Email")]
+        [EmailAddress(ErrorMessage = "Wrong Input")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Enter password")]
         [Display(Name = "Password")]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password, ErrorMessage = "Wrong input")]
         public string Password { get; set; }
-        
+
         [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        public bool RememberMe { get; set; } = false;
     }
 }
