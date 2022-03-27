@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager", "HockeyManager\HockeyManager.csproj", "{20CFA21A-DD0A-4E11-9AA8-9226069E018B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HockeyManager", "HockeyManager\HockeyManager.csproj", "{20CFA21A-DD0A-4E11-9AA8-9226069E018B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager.DataLayer", "HockeyManager.DataLayer\HockeyManager.DataLayer.csproj", "{06C6703B-FB77-48F3-AE25-35769EB2642F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HockeyManager.DataLayer", "HockeyManager.DataLayer\HockeyManager.DataLayer.csproj", "{06C6703B-FB77-48F3-AE25-35769EB2642F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HockeyManager.Tests", "HockeyManager.Tests\HockeyManager.Tests.csproj", "{64F7ECC6-EEB0-4B38-AE0D-A9D2CD95BEC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{88B3451C-B3BB-4C58-87DD-B991BABFB6A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager.Services", "HockeyManager.Services\HockeyManager.Services.csproj", "{BF95124C-30A1-422B-9871-4AC0644D39D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager.Models", "HockeyManager.Models\HockeyManager.Models.csproj", "{19A2E606-B3EF-4E04-8155-7888CFFF1A66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,24 @@ Global
 		{06C6703B-FB77-48F3-AE25-35769EB2642F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06C6703B-FB77-48F3-AE25-35769EB2642F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06C6703B-FB77-48F3-AE25-35769EB2642F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64F7ECC6-EEB0-4B38-AE0D-A9D2CD95BEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64F7ECC6-EEB0-4B38-AE0D-A9D2CD95BEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64F7ECC6-EEB0-4B38-AE0D-A9D2CD95BEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64F7ECC6-EEB0-4B38-AE0D-A9D2CD95BEC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF95124C-30A1-422B-9871-4AC0644D39D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF95124C-30A1-422B-9871-4AC0644D39D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF95124C-30A1-422B-9871-4AC0644D39D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF95124C-30A1-422B-9871-4AC0644D39D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{64F7ECC6-EEB0-4B38-AE0D-A9D2CD95BEC4} = {88B3451C-B3BB-4C58-87DD-B991BABFB6A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7BA2277-83B1-4DCC-8A5F-DAE07107E2A2}

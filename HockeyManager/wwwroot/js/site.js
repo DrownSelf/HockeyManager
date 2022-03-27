@@ -107,7 +107,7 @@ $("#setRoles").click(function () {
 $("#LogOutAction").click(function(){
     $.ajax({
         type: "POST",
-        url: "/Employee/LogOut",
+        url: "/Account/LogOut",
         success: function(response){
             alert(response.responseText);
             window.location.href = "/Home/Index";

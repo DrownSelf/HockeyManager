@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using HockeyManager.DataLayer.Repository;
+using HockeyManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,14 @@ builder.Services.AddDbContext<GeneralContext>(options =>
     options.UseNpgsql(connection));
 builder.Services.AddIdentity<Employee, IdentityRole>()
     .AddEntityFrameworkStores<GeneralContext>();
+builder.Services.AddTransient(typeof(IRepository<>), typeof(GeneralRepository<>));
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<IEmployeeServise, EmployeeService>();
+builder.Services.AddTransient<IRoleRepository, RoleRepository>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddTransient<IEmployeeRoleService, EmployeeRoleService>();
+builder.Services.AddTransient<IEmployeeRoleRepository, EmployeeRoleRepository>();
+builder.Services.AddTransient<ISignInService, SignInService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

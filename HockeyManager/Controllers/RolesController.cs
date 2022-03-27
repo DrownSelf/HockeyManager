@@ -1,5 +1,6 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.Models;
+using HockeyManager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,13 @@ namespace HockeyManager.Controllers
     [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<Employee> _userManager;
+        private readonly IRoleService _roleManager;
+        private readonly IEmployeeRoleService _employeeRoleService;
 
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<Employee> userManager)
+        public RolesController(IRoleService roleManager, IEmployeeRoleService employeeRoleService)
         {
             _roleManager = roleManager;
-            _userManager = userManager;
+            _employeeRoleService = employeeRoleService;
         }
 
         [HttpGet]
@@ -38,8 +39,8 @@ namespace HockeyManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newRole = await _roleManager.CreateAsync(new IdentityRole(name));
-                if (newRole.Succeeded)
+                var newRole = await _roleManager.CreateRoleAsync(name);
+                if (newRole)
                     return RedirectToAction("Index", "Employee");
                 ModelState.AddModelError("", "Something wrong happened");
             }
@@ -49,16 +50,12 @@ namespace HockeyManager.Controllers
         [HttpPut]
         public async Task<IActionResult> RolesUpdate(string id, string newName)
         {
-            var findedRole = await _roleManager.FindByIdAsync(id);
-            if(findedRole != null)
-            {
-                findedRole.Name = newName;
-                var result = await _roleManager.UpdateAsync(findedRole);
-                if (result.Succeeded)
-                    return Ok();
-                ModelState.AddModelError("", "Something wrong happened");
-            }
-            return RedirectToAction("Roles");
+            if(!ModelState.IsValid)
+                return View();
+            var result = await _roleManager.UpdateRoleAsync(id, newName);
+            if (result)
+                return Ok();
+            return BadRequest();
         }
 
         [HttpGet]
@@ -70,34 +67,21 @@ namespace HockeyManager.Controllers
         [HttpPut]
         public async Task<IActionResult> EditRoleState(SetRoleRequest setRoleRequest)
         {
-            var findedUser = await _userManager.FindByIdAsync(setRoleRequest.UserId);
-            if (findedUser != null)
-            {
-                var employeeRoles = await _userManager.GetRolesAsync(findedUser);
-
-                var deletedRoles = employeeRoles.Except(setRoleRequest.Roles);
-                var addedRoles = setRoleRequest.Roles.Except(employeeRoles);
-
-                await _userManager.AddToRolesAsync(findedUser, addedRoles);
-                await _userManager.RemoveFromRolesAsync(findedUser, deletedRoles);
-
+            if(!ModelState.IsValid)
+                return View(setRoleRequest);
+            var result = await _employeeRoleService.EditRoleState(setRoleRequest);
+            if (result)
                 return Ok();
-            }
-            return View(setRoleRequest);
+            return BadRequest();
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteRole(string id)
         {
-            var findedRole = await _roleManager.FindByIdAsync(id);
-            if(findedRole != null)
-            {
-                var result = await _roleManager.DeleteAsync(findedRole);
-                if (result.Succeeded)
-                    return Ok();
-                ModelState.AddModelError("", "Something wrong happened");
-            }
-            return RedirectToAction("Roles");
+            var result = await _roleManager.DeleteRoleAsync(id);
+            if (result)
+                return Ok();
+            return BadRequest();
         }
     }
 }
