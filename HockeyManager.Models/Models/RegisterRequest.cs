@@ -2,7 +2,7 @@
 
 namespace HockeyManager.Models
 {
-    public class RegisterRequest
+    public class RegisterRequest : ICreateRequest
     {
         [Required]
         [Display(Name = "Email")]

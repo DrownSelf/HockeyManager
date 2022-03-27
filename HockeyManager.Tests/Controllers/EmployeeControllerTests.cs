@@ -30,6 +30,7 @@ namespace HockeyManager.Tests.Controllers
             var userManager = new Mock<UserManager<Employee>>();
             var sut = new EmployeeController(null);
             userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).Returns(()=>null);
+            
             //Act
             var result = sut.Delete("testId");
 

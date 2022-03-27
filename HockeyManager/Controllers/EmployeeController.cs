@@ -1,9 +1,8 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.Models;
+using HockeyManager.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,28 +12,30 @@ namespace HockeyManager.Controllers
     [Authorize(Roles = "admin")]
     public class EmployeeController : Controller
     {
-        private readonly UserManager<Employee> _userManager;
+        private readonly IEmployeeServise _employeeService;
+        private readonly IEmployeeRoleService _employeeRoleService;
 
-        public EmployeeController(UserManager<Employee> userManager)
+        public EmployeeController(IEmployeeServise userManager, IEmployeeRoleService employeeRoleService)
         {
-            _userManager = userManager;
+            _employeeService = userManager;
+            _employeeRoleService = employeeRoleService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Manager()
         {
             List<UserRoles> userRoles = new List<UserRoles>();
-            List<Employee> employees = _userManager.Users.ToList();
+            IEnumerable<Employee> employees = _employeeService.Employees;
             foreach (var employee in employees)
             {
-                IList<string> role = await _userManager.GetRolesAsync(employee);
+                IList<string> role = await _employeeRoleService.GetRolesOfEmployeeAsync(employee);
                 userRoles.Add(new UserRoles()
-                    {
-                        Roles = role,
-                        USDSalary = employee.USDSallary,
-                        UserEmail = employee.Email,
-                        UserId = employee.Id
-                    }
+                {
+                    Roles = role,
+                    USDSalary = employee.USDSallary,
+                    UserEmail = employee.Email,
+                    UserId = employee.Id
+                }
                 );
             }
             return View(userRoles);
@@ -51,16 +52,10 @@ namespace HockeyManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newEmployee = new Employee
-                {
-                    Email = createRequest.Email,
-                    USDSallary = createRequest.USDSalary,
-                    UserName = createRequest.Email
-                };
-                var result = await _userManager.CreateAsync(newEmployee, createRequest.Password);
-                if (result.Succeeded)
+                var result = await _employeeService.CreateEmployeeAsync(createRequest);
+                if (result)
                     return RedirectToAction("Manager", "Employee");
-                ModelState.AddModelError("" , "Something wrong happened");
+                ModelState.AddModelError("", "Something wrong happened");
             }
             return View(createRequest);
         }
@@ -71,49 +66,26 @@ namespace HockeyManager.Controllers
             return View();
         }
 
-        [Authorize (Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee(ChangeEmployeeRequest changeEmployeeRequest)
         {
-            if (ModelState.IsValid)
-            {
-                var findedUser = await _userManager.FindByIdAsync(changeEmployeeRequest.EmployeeId);
-                if (findedUser != null)
-                {
-                    findedUser.UserName = changeEmployeeRequest.Email;
-                    findedUser.Email = changeEmployeeRequest.Email;
-                    findedUser.USDSallary = changeEmployeeRequest.USDSalary;
-                    await _userManager.UpdateAsync(findedUser);
-                    return Ok();
-                }
-                ModelState.AddModelError("", "User haven't found");
-            }
-            return View(changeEmployeeRequest);
+            if (!ModelState.IsValid)
+                return View(changeEmployeeRequest);
+            var result = await _employeeService.UpdateEmployeeAsync(changeEmployeeRequest);
+            if (result)
+                return Ok();
+            return BadRequest(result);
         }
 
         [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                var findedEmployee = await _userManager.FindByIdAsync(id);
-                if (findedEmployee != null)
-                {
-                    if (await _userManager.IsInRoleAsync(findedEmployee, "admin"))
-                        return BadRequest("You can't delete admin");
-
-                    var result = await _userManager.DeleteAsync(findedEmployee);
-                    if (result.Succeeded)
-                        return Ok();
-                    ModelState.AddModelError("", "This user is not existing");
-                }
-                return RedirectToAction("Manager", "Employee");
-            }
-            catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var result = await _employeeService.DeleteEmployeeAsync(id);
+            if (result)
+                return Ok();
+            return BadRequest();
         }
     }
 }

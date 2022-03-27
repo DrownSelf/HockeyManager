@@ -2,7 +2,7 @@
 
 namespace HockeyManager.Models
 {
-    public class CreateEmployeeRequest
+    public class CreateEmployeeRequest : ICreateRequest
     {
         [Required(ErrorMessage = "Enter Email")]
         [EmailAddress(ErrorMessage = "Wrong input")]

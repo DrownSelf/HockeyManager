@@ -1,5 +1,6 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.Models;
+using HockeyManager.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,13 +10,13 @@ namespace HockeyManager.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<Employee> _userManager;
-        private readonly SignInManager<Employee> _signInManager;
+        private readonly IEmployeeServise _employeeService;
+        private readonly ISignInService _signInService;
 
-        public AccountController(UserManager<Employee> userManager, SignInManager<Employee> signInManager)
+        public AccountController(IEmployeeServise employeeService, ISignInService signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _employeeService = employeeService;
+            _signInService = signInManager;
         }
 
         [HttpGet]
@@ -29,12 +30,8 @@ namespace HockeyManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newEmployee = new Employee();
-                newEmployee.Email = registerRequest.Email;
-                newEmployee.UserName = registerRequest.Email;
-                var result = await _userManager.CreateAsync(newEmployee, registerRequest.Password);
-
-                if (result.Succeeded)
+                var result = await _employeeService.RegisterEmployeeAsync(registerRequest);
+                if (result)
                     return RedirectToAction("Index", "Home");
                 ModelState.AddModelError("", "Something wrong happened");
             }
@@ -53,12 +50,9 @@ namespace HockeyManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var findedUser = await _userManager.FindByEmailAsync(logInRequest.Email);
-                var result = await
-                    _signInManager.PasswordSignInAsync(findedUser, logInRequest.Password, logInRequest.RememberMe, false);
-                if (result.Succeeded)
+                var result = await _signInService.PasswordSignInAsync(logInRequest);
+                if (result)
                     return RedirectToAction("Index", "Home");
-                
                 ModelState.AddModelError("", "Wrong Email or password");
             }
             return View(logInRequest);
@@ -67,7 +61,7 @@ namespace HockeyManager.Controllers
         [HttpPost]
         public async Task<IActionResult> LogOut()
         {
-            await _signInManager.SignOutAsync();
+            await _signInService.SignOutAsync();
             return Ok();
         }
     }
