@@ -7,22 +7,22 @@ namespace HockeyManager.Services
 {
     public class EmployeeService : IEmployeeServise
     {
-        public IEnumerable<Employee> Employees 
-        { 
-            get 
-            { 
-                return _employeeRepository.Entities; 
+        private IEmployeeRepository _employeeRepository;
+
+        public IEnumerable<Employee> Employees
+        {
+            get
+            {
+                return _employeeRepository.Entities;
             }
         }
-        
-        private IEmployeeRepository _employeeRepository;
 
         public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
 
-        private Employee InitEmployee(ICreateRequest createRequest)
+        public async Task<bool> CreateEmployeeAsync(CreateEmployeeRequest createRequest)
         {
             var newEmployee = new Employee
             {
@@ -33,46 +33,25 @@ namespace HockeyManager.Services
                 NormalizedUserName = createRequest.Email.ToUpper()
             };
             newEmployee.PasswordHash = new PasswordHasher<Employee>().HashPassword(newEmployee, createRequest.Password);
-            return newEmployee;
-        }
-
-        public async Task<bool> RegisterEmployeeAsync(RegisterRequest registerRequest)
-        {
-            try
-            {
-                var employee = InitEmployee(registerRequest);
-                await _employeeRepository.CreateAsync(employee);
-                return true;
-            }
-            catch (Exception)
-            {
+            var result = _employeeRepository.CreateAsync(newEmployee);
+            if (!result)
                 return false;
-            }
+            await _employeeRepository.SaveAsync();
+            return true;
         }
 
-        public async Task<bool> CreateEmployeeAsync(CreateEmployeeRequest createRequest)
+        public async Task<bool> DeleteEmployeeAsync(string id, IEmployeeRoleService employeeRoleService)
         {
-            try
-            {
-                var newEmployee = InitEmployee(createRequest);
-                newEmployee.USDSallary = createRequest.USDSalary;
-                await _employeeRepository.CreateAsync(newEmployee);
-                return true;
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> DeleteEmployeeAsync(string id)
-        {
-            //if (await _employeeService.IsInRoleAsync(findedEmployee, "admin"))
-            //    return BadRequest("You can't delete admin"); 
             var findedEmployee = await _employeeRepository.FindByIdAsync(id);
             if (findedEmployee == null)
                 return false;
+            
+            var roleList = await employeeRoleService.GetRolesOfEmployeeAsync(findedEmployee);
+            var result = roleList.Contains("admin");
+            if(result)
+                return false;
             _employeeRepository.Delete(findedEmployee);
+            await _employeeRepository.SaveAsync();
             return true;
         }
 
@@ -81,11 +60,10 @@ namespace HockeyManager.Services
             var findedEmployee = await _employeeRepository.FindByIdAsync(changeEmployee.EmployeeId);
             if (findedEmployee == null)
                 return false;
-            
+
             findedEmployee.Email = changeEmployee.Email;
             findedEmployee.NormalizedEmail = findedEmployee.Email.ToUpper();
             findedEmployee.NormalizedUserName = findedEmployee.NormalizedEmail;
-            findedEmployee.USDSallary = changeEmployee.USDSalary;
             findedEmployee.UserName = findedEmployee.Email;
             await _employeeRepository.SaveAsync();
             return true;

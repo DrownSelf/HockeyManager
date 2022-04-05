@@ -33,7 +33,7 @@ $("#deleteEmployee").click(function (){
        });
 });
 
-$("#deleteRole").click(function () {
+$("button[id = 'deleteRole']").click(function () {
     var RoleId = $(this).attr("RoleId");
     $.ajax({
         type: "DELETE",
@@ -70,7 +70,7 @@ $("#setRoleName").click(function () {
     var name = $("#getName").val();
     $.ajax({
         type: "PUT",
-        url: 'Roles/RolesUpdate',
+        url: '/Roles/RolesUpdate',
         data: { "id": id, "newName": name },
         success: function () {
             window.location.href = "/Roles/RolesManager";

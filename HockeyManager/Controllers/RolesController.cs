@@ -1,10 +1,7 @@
-﻿using HockeyManager.DataLayer;
-using HockeyManager.Models;
+﻿using HockeyManager.Models;
 using HockeyManager.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,19 +10,19 @@ namespace HockeyManager.Controllers
     [Authorize(Roles = "admin")]
     public class RolesController : Controller
     {
-        private readonly IRoleService _roleManager;
+        private readonly IRoleService _roleService;
         private readonly IEmployeeRoleService _employeeRoleService;
 
         public RolesController(IRoleService roleManager, IEmployeeRoleService employeeRoleService)
         {
-            _roleManager = roleManager;
+            _roleService = roleManager;
             _employeeRoleService = employeeRoleService;
         }
 
         [HttpGet]
         public IActionResult RolesManager()
         {
-            return View(_roleManager.Roles);
+            return View(_roleService.Roles.ToList());
         }
         
         [HttpGet]
@@ -39,20 +36,26 @@ namespace HockeyManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newRole = await _roleManager.CreateRoleAsync(name);
+                var newRole = await _roleService.CreateRoleAsync(name);
                 if (newRole)
-                    return RedirectToAction("Index", "Employee");
-                ModelState.AddModelError("", "Something wrong happened");
+                    return Ok();
+                return BadRequest();
             }
             return View(name);
         }
 
+        [HttpGet]
+        public IActionResult RolesUpdate()
+        {
+            return View();
+        }
+        
         [HttpPut]
         public async Task<IActionResult> RolesUpdate(string id, string newName)
         {
             if(!ModelState.IsValid)
                 return View();
-            var result = await _roleManager.UpdateRoleAsync(id, newName);
+            var result = await _roleService.UpdateRoleAsync(id, newName);
             if (result)
                 return Ok();
             return BadRequest();
@@ -61,7 +64,7 @@ namespace HockeyManager.Controllers
         [HttpGet]
         public IActionResult EditRoleState()
         {
-            return View(_roleManager.Roles);
+            return View(_roleService.Roles.ToList());
         }
 
         [HttpPut]
@@ -78,7 +81,7 @@ namespace HockeyManager.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteRole(string id)
         {
-            var result = await _roleManager.DeleteRoleAsync(id);
+            var result = await _roleService.DeleteRoleAsync(id);
             if (result)
                 return Ok();
             return BadRequest();

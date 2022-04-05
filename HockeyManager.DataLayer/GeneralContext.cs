@@ -13,9 +13,32 @@ namespace HockeyManager.DataLayer
             Database.EnsureCreated();
         }
 
+        public DbSet<Inventory> Inventories { get; set; }
+
+        public DbSet<Player> Players { get; set; }
+
+        public DbSet<PlayerContract> Contracts { get; set; }
+
+        public DbSet<PlayerStatistic> Statistics { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.
+                Entity<Player>().
+                HasOne(p => p.PlayerContract).
+                WithOne(c => c.Player).
+                HasForeignKey<PlayerContract>(c => c.PlayerId);
+            builder.
+                Entity<Player>().
+                HasOne(p => p.PlayerStatistics).
+                WithOne(s => s.Player).
+                HasForeignKey<PlayerStatistic>(s => s.PlayerId);
+            builder.
+                Entity<Employee>().
+                HasOne(e=>e.EmployeeContract).
+                WithOne(c=>c.Employee).
+                HasForeignKey<EmployeeContract>(c=> c.EmployeeId);
             string userId = this.SeedEmployee(builder);
             string roleId = this.SeedRole(builder);
             this.SeedUserRole(builder, userId, roleId);
@@ -27,7 +50,7 @@ namespace HockeyManager.DataLayer
             {
                 Id = Guid.NewGuid().ToString(),
                 UserName = "Admin",
-                Email = "admin@gmail.com",
+                Email = "admin@gmail.com"
             };
             admin.NormalizedEmail = admin.Email.ToUpper();
             admin.NormalizedUserName = admin.UserName.ToUpper();

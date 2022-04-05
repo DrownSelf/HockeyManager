@@ -2,11 +2,6 @@
 using HockeyManager.DataLayer.Repository;
 using HockeyManager.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HockeyManager.Services
 {
@@ -27,13 +22,9 @@ namespace HockeyManager.Services
         {
             List<string> findedRoles = new List<string>();
             foreach (var role in roles)
-            {
                 foreach (var RoleId in userRoles)
-                {
                     if (role.Id == RoleId)
                         findedRoles.Add(role.Name);
-                }
-            }
             return findedRoles;
         }
 
@@ -102,21 +93,15 @@ namespace HockeyManager.Services
             var findedUser = await _employeeRepository.FindByIdAsync(setRoleRequest.UserId);
             if (findedUser == null)
                 return false;
-            try
-            {
-                var employeeRoles = await GetRolesOfEmployeeAsync(findedUser);
-                var deletedRoles = employeeRoles.Except(setRoleRequest.Roles);
-                var addedRoles = setRoleRequest.Roles.Except(employeeRoles);
 
-                await AddRolesToEmployeeAsync(findedUser, addedRoles);
-                await RemoveRolesFromEmployeeAsync(findedUser, deletedRoles);
+            var employeeRoles = await GetRolesOfEmployeeAsync(findedUser);
+            var deletedRoles = employeeRoles.Except(setRoleRequest.Roles).ToList();
+            var addedRoles = setRoleRequest.Roles.Except(employeeRoles).ToList();
 
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
+            await AddRolesToEmployeeAsync(findedUser, addedRoles);
+            await RemoveRolesFromEmployeeAsync(findedUser, deletedRoles);
+            await _employeeRoleRepository.SaveAsync();
+            return true;
         }
 
     }

@@ -26,16 +26,16 @@ namespace HockeyManager.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registr(RegisterRequest registerRequest)
+        public async Task<IActionResult> Registr(CreateEmployeeRequest createEmployeeRequest)
         {
             if (ModelState.IsValid)
             {
-                var result = await _employeeService.RegisterEmployeeAsync(registerRequest);
+                var result = await _employeeService.CreateEmployeeAsync(createEmployeeRequest);
                 if (result)
                     return RedirectToAction("Index", "Home");
                 ModelState.AddModelError("", "Something wrong happened");
             }
-            return View(registerRequest);
+            return View(createEmployeeRequest);
         }
 
         [HttpGet]

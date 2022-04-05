@@ -15,9 +15,9 @@ namespace HockeyManager.Controllers
         private readonly IEmployeeServise _employeeService;
         private readonly IEmployeeRoleService _employeeRoleService;
 
-        public EmployeeController(IEmployeeServise userManager, IEmployeeRoleService employeeRoleService)
+        public EmployeeController(IEmployeeServise employeeService, IEmployeeRoleService employeeRoleService)
         {
-            _employeeService = userManager;
+            _employeeService = employeeService;
             _employeeRoleService = employeeRoleService;
         }
 
@@ -28,11 +28,10 @@ namespace HockeyManager.Controllers
             IEnumerable<Employee> employees = _employeeService.Employees;
             foreach (var employee in employees)
             {
-                IList<string> role = await _employeeRoleService.GetRolesOfEmployeeAsync(employee);
+                IList<string> roles = await _employeeRoleService.GetRolesOfEmployeeAsync(employee);
                 userRoles.Add(new UserRoles()
                 {
-                    Roles = role,
-                    USDSalary = employee.USDSallary,
+                    Roles = roles,
                     UserEmail = employee.Email,
                     UserId = employee.Id
                 }
@@ -42,13 +41,13 @@ namespace HockeyManager.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CreateEmployee()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateEmployeeRequest createRequest)
+        public async Task<IActionResult> CreateEmployee(CreateEmployeeRequest createRequest)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +65,6 @@ namespace HockeyManager.Controllers
             return View();
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateEmployee(ChangeEmployeeRequest changeEmployeeRequest)
         {
@@ -78,11 +76,10 @@ namespace HockeyManager.Controllers
             return BadRequest(result);
         }
 
-        [Authorize(Roles = "admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _employeeService.DeleteEmployeeAsync(id);
+            var result = await _employeeService.DeleteEmployeeAsync(id, _employeeRoleService);
             if (result)
                 return Ok();
             return BadRequest();
