@@ -11,54 +11,50 @@ namespace HockeyManager.Services
 {
     public class RoleService : IRoleService
     {
-        public IEnumerable<IdentityRole> Roles 
-        { 
+        public IEnumerable<IdentityRole> Roles
+        {
             get
             {
                 return _roleRepository.Entities;
-            } 
-        } 
-        
-        private readonly IRoleRepository _roleRepository;
-        private readonly IEmployeeRepository _employeeRepository;
+            }
+        }
 
-        public RoleService(IRoleRepository roleRepository, IEmployeeRepository employeeRepository)
+        private readonly IRoleRepository _roleRepository;
+
+        public RoleService(IRoleRepository roleRepository)
         {
             _roleRepository = roleRepository;
-            _employeeRepository = employeeRepository;
         }
 
         public async Task<bool> CreateRoleAsync(string nameOfrole)
         {
-            try
+            var newRole = new IdentityRole()
             {
-                var newRole = new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = nameOfrole
-                };
-                await _roleRepository.CreateAsync(newRole);
-                return true;
-            }
-            catch(Exception ex)
-            {
+                Id = Guid.NewGuid().ToString(),
+                Name = nameOfrole
+            };
+            var result = _roleRepository.CreateAsync(newRole);
+            if(!result)
                 return false;
-            }
+            await _roleRepository.SaveAsync();
+            return true;
+
         }
 
         public async Task<bool> DeleteRoleAsync(string roleId)
         {
             var findedRole = await _roleRepository.FindByIdAsync(roleId);
-            if (findedRole == null)
+            if (findedRole == null || findedRole.Name == "admin")
                 return false;
             _roleRepository.Delete(findedRole);
+            await _roleRepository.SaveAsync();
             return true;
         }
 
         public async Task<bool> UpdateRoleAsync(string id, string newName)
         {
             var findedRole = await _roleRepository.FindByIdAsync(id);
-            if (findedRole == null)
+            if (findedRole == null || findedRole.Name == "admin")
                 return false;
             findedRole.Name = newName;
             findedRole.NormalizedName = newName.ToUpper();

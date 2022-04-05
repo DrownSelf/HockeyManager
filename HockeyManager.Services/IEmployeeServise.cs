@@ -8,9 +8,7 @@ namespace HockeyManager.Services
     {
         public IEnumerable<Employee> Employees{ get; }
 
-        public Task<bool> RegisterEmployeeAsync(RegisterRequest registerRequest);
-
-        public Task<bool> DeleteEmployeeAsync(string id);
+        public Task<bool> DeleteEmployeeAsync(string id, IEmployeeRoleService employeeRoleService);
 
         public Task<bool> CreateEmployeeAsync(CreateEmployeeRequest createEmployee);
 

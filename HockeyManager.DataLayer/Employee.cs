@@ -9,6 +9,6 @@ namespace HockeyManager.DataLayer
 {
     public class Employee : IdentityUser
     {
-        public int USDSallary { get; set; }
+        public EmployeeContract EmployeeContract { get; set; }
     }
 }

@@ -12,9 +12,9 @@ namespace HockeyManager.DataLayer.Repository
     {
         public IEnumerable<T> Entities { get; }
 
-        public void Delete(T entity);
+        public bool Delete(T entity);
 
-        public Task CreateAsync(T entity);
+        public bool CreateAsync(T entity);
 
         public Task SaveAsync();
 

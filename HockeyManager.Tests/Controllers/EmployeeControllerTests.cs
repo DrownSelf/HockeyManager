@@ -4,6 +4,9 @@ using Xunit;
 using Moq;
 using HockeyManager.DataLayer;
 using Microsoft.AspNetCore.Identity;
+using HockeyManager.Services;
+using HockeyManager.DataLayer.Repository;
+using HockeyManager.Models;
 
 namespace HockeyManager.Tests.Controllers
 {
@@ -13,11 +16,11 @@ namespace HockeyManager.Tests.Controllers
         public void Create_should_return_View()
         {
             //Arrange
-            var userManager = new Mock<UserManager<Employee>>();
-            var sut = new EmployeeController(null);
-
+            var employeeService = new Mock<EmployeeService>();
+            var employeeRoleService = new Mock<EmployeeRoleService>();
+            var sut = new EmployeeController(employeeService.Object, employeeRoleService.Object);
             //Act
-            var result = sut.Create();
+            var result = sut.CreateEmployee();
 
             //Assert
             Assert.NotNull(result);
@@ -27,9 +30,9 @@ namespace HockeyManager.Tests.Controllers
         public void Delete_WhenDoesntExist_ShouldReturnRedirectToAction()
         {
             //Arrange
-            var userManager = new Mock<UserManager<Employee>>();
-            var sut = new EmployeeController(null);
-            userManager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).Returns(()=>null);
+            var employeeService = new Mock<EmployeeService>();
+            var employeeRoleService = new Mock<EmployeeRoleService>();
+            var sut = new EmployeeController(employeeService.Object, employeeRoleService.Object);
             
             //Act
             var result = sut.Delete("testId");

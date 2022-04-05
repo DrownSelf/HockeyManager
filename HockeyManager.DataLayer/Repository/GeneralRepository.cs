@@ -21,14 +21,25 @@ namespace HockeyManager.DataLayer.Repository
             get { return _generalContext.Set<T>().ToList(); } 
         }
 
-        public async Task CreateAsync(T entity)
+        public bool CreateAsync(T entity)
         {
-            await _generalContext.Set<T>().AddAsync(entity);
+            var result = _generalContext.Set<T>().AddAsync(entity);
+            if (result.IsCompletedSuccessfully)
+                return true;
+            return false;
         }
 
-        public void Delete(T entity)
+        public bool Delete(T entity)
         {
-            _generalContext.Set<T>().Remove(entity);
+            try
+            {
+                _generalContext.Set<T>().Remove(entity);
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<T?> FindByIdAsync(string id)
