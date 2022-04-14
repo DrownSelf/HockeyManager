@@ -1,16 +1,12 @@
 ﻿using HockeyManager.DataLayer.Repository;
-using HockeyManager.Models;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HockeyManager.Services
 {
     public class RoleService : IRoleService
     {
+        private readonly IRoleRepository _roleRepository;
+
         public IEnumerable<IdentityRole> Roles
         {
             get
@@ -18,8 +14,6 @@ namespace HockeyManager.Services
                 return _roleRepository.Entities;
             }
         }
-
-        private readonly IRoleRepository _roleRepository;
 
         public RoleService(IRoleRepository roleRepository)
         {

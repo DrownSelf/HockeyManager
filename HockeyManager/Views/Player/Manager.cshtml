@@ -1,0 +1,40 @@
+﻿@using HockeyManager.DataLayer
+@model IEnumerable<Player>
+
+<div>
+    <h2>Players</h2>
+    <a href="">Add new player</a>
+    @if (Model == null)
+    {
+        <p>Inventory is empty</p>
+    }
+    else
+    {
+        <div>
+            <table>
+                @foreach(var player in Model)
+                {
+                    <tr id="@player.PlayerId">
+                        <td>@player.Name</td>
+                        <td>@player.Surname</td>
+                        <td>@player.Position</td>
+                        <td>@player.Captain</td>
+                        <td><input type="text" id="deleteAmount"/></td>
+                        <td>
+                            <button id="deleteItem" itemId="@player.PlayerId">Delete</button>
+                        </td>
+                        <td>
+                            <a id="watchStats" statsId="@player.PlayerStatistics.StatsId">Stats</a>
+                        </td>
+                        <td>
+                            <a id="watchContract" contractId="@player.PlayerContract.PlayerContractId">Contract</a>
+                        </td>
+                        <td>
+                            <a href="/Player/UpdatePlayer" id="storeId" storedId="@player.PlayerId">Update</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>

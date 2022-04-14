@@ -26,13 +26,13 @@ namespace HockeyManager.Controllers
         }
         
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult CreateRole()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name)
+        public async Task<IActionResult> CreateRole(string name)
         {
             if (ModelState.IsValid)
             {

@@ -1,0 +1,34 @@
+﻿@using HockeyManager.DataLayer
+@model IEnumerable<Inventory>
+<div>
+    <h2>Inventory</h2>
+    <a href="/Engineer/AddItem">Create new item</a>
+    @if (Model == null)
+    {
+        <p>Inventory is empty</p>
+    }
+    else
+    {
+        <div>
+            <table>
+                @foreach(var Item in Model)
+                {
+                    <tr id="@Item.InventoryId">
+                        <td>@Item.TypeOfAccessory</td>
+                        <td>@Item.NameOfAccessory</td>
+                        <td>@Item.Amount</td>
+                        <td>@Item.DataOfLastMaintain</td>
+                        <td>@Item.USDCost</td>
+                        <td><input type="text" id="deleteAmount"/></td>
+                        <td>
+                            <button id="deleteItem" itemid="@Item.InventoryId">Delete</button>
+                        </td>
+                        <td>
+                            <a href="/Engineer/UpdateItem" id="storeId" storedId="@Item.InventoryId">Update</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>

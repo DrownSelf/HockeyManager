@@ -1,9 +1,6 @@
-﻿using HockeyManager.DataLayer;
-using HockeyManager.Models;
+﻿using HockeyManager.Models;
 using HockeyManager.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace HockeyManager.Controllers

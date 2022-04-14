@@ -1,12 +1,7 @@
 ﻿using HockeyManager.Controllers;
-using System;
 using Xunit;
 using Moq;
-using HockeyManager.DataLayer;
-using Microsoft.AspNetCore.Identity;
 using HockeyManager.Services;
-using HockeyManager.DataLayer.Repository;
-using HockeyManager.Models;
 
 namespace HockeyManager.Tests.Controllers
 {
@@ -21,6 +16,7 @@ namespace HockeyManager.Tests.Controllers
             var sut = new EmployeeController(employeeService.Object, employeeRoleService.Object);
             //Act
             var result = sut.CreateEmployee();
+
 
             //Assert
             Assert.NotNull(result);
@@ -40,5 +36,6 @@ namespace HockeyManager.Tests.Controllers
             //Assert
             Assert.NotNull(result);
         }
+
     }
 }

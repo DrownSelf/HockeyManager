@@ -1,17 +1,14 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.DataLayer.Repository;
 using HockeyManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HockeyManager.Services
 {
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerRepository _playerRepository;
+
+        public IEnumerable<Player> Players { get => _playerRepository.Entities; }
 
         public PlayerService(IPlayerRepository playerRepository)
         {

@@ -25,6 +25,7 @@ namespace HockeyManager.Services
             {
                 PlayerContractId = Guid.NewGuid().ToString(),
                 PlayerId = findedPlayer.PlayerId,
+                Player = findedPlayer,
                 USDSalary = createPlayerContractRequest.USDSalary,
                 DayOfContractConclusion = createPlayerContractRequest.DayOfContractConclusion,
                 DayOfConctractEnding = createPlayerContractRequest.DayOfConctractEnding,
@@ -35,7 +36,7 @@ namespace HockeyManager.Services
             if (!result)
                 return false;
             await _playerContractRepository.SaveAsync();
-            findedPlayer.PlayerContractId = newContract.PlayerContractId;
+            findedPlayer.PlayerContract = newContract;
             await _playerRepository.SaveAsync();
             return true;
         }
@@ -60,10 +61,12 @@ namespace HockeyManager.Services
             var findedContract = await _playerContractRepository.FindByIdAsync(changePlayerContractRequest.ContractId);
             if (findedContract == null)
                 return false;
+
             findedContract.DayOfConctractEnding = changePlayerContractRequest.DayOfConctractEnding;
             findedContract.DayOfContractConclusion = changePlayerContractRequest.DayOfContractConclusion;
             findedContract.USDSalary = changePlayerContractRequest.USDSalary;
             findedContract.Benefits = changePlayerContractRequest.Benefits;
+            
             await _playerContractRepository.SaveAsync();
             return true;
         }

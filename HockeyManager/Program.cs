@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using HockeyManager.DataLayer.Repository;
 using HockeyManager.Services;
+using HockeyManager.APIs;
+using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,19 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IEmployeeRoleService, EmployeeRoleService>();
 builder.Services.AddTransient<IEmployeeRoleRepository, EmployeeRoleRepository>();
 builder.Services.AddTransient<ISignInService, SignInService>();
-// Add services to the container.
+builder.Services.AddTransient<IPlayerRepository, PlayerRepository>();
+builder.Services.AddTransient<IPlayerService, PlayerService>();
+builder.Services.AddTransient<IPlayerStatisticRepository, PlayerStatisticRepository>();
+builder.Services.AddTransient<IPlayerStatisticService, PlayerStatisticService>();
+builder.Services.AddTransient<IPlayerContractRepository, PlayerContractRepository>();
+builder.Services.AddTransient<IPlayerContractService, PlayerContractService>();
+builder.Services.AddTransient<IInventoryRepository, InventoryRepository>();
+builder.Services.AddTransient<IInventoryService, InventoryService>();
+builder.Services.AddTransient<IEmployeeContractRepository, EmployeeContractRepository>();
+builder.Services.AddTransient<IEmployeeContractService, EmployeeContractService>();
+builder.Services.AddTransient<IAgentService, AgentService>();
+builder.Services.AddTransient<NhlApi>();
+builder.Services.AddTransient<HttpClient>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

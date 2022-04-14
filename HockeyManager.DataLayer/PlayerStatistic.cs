@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace HockeyManager.DataLayer
 {
     public class PlayerStatistic
     {
-        public Player Player { get; set; }
-
+        [Key]
         public string StatsId { get; set; }
+
+        public Player Player { get; set; }
 
         public string PlayerId { get; set; }
 

@@ -1,11 +1,6 @@
 ﻿using HockeyManager.DataLayer;
 using HockeyManager.DataLayer.Repository;
 using HockeyManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HockeyManager.Services
 {
@@ -13,6 +8,8 @@ namespace HockeyManager.Services
     {
         private readonly IPlayerStatisticRepository _playerStatisticRepository;
         private readonly IPlayerRepository _playerRepository;
+
+        public IEnumerable<PlayerStatistic> Statistics { get => _playerStatisticRepository.Entities; }
 
         public PlayerStatisticService(IPlayerRepository playerRepository, IPlayerStatisticRepository playerStatisticRepository)
         {
@@ -43,10 +40,12 @@ namespace HockeyManager.Services
             var findedPlayer = await _playerRepository.FindByIdAsync(createPlayerStatisticRequest.PlayerId);
             if (findedPlayer == null)
                 return false;
+
             var newStats = new PlayerStatistic
             {
                 StatsId = Guid.NewGuid().ToString(),
                 PlayerId = findedPlayer.PlayerId,
+                Player = findedPlayer,
                 Goals = createPlayerStatisticRequest.Goals,
                 Assist = createPlayerStatisticRequest.Assist,
                 ShootsOnGoals = createPlayerStatisticRequest.ShootsOnGoals,
@@ -57,8 +56,9 @@ namespace HockeyManager.Services
             var result = _playerStatisticRepository.CreateAsync(newStats);
             if (!result)
                 return false;
+
             await _playerStatisticRepository.SaveAsync();
-            findedPlayer.PlayerStatisticsId = newStats.StatsId;
+            findedPlayer.PlayerStatistics = newStats;
             await _playerRepository.SaveAsync();
             return true;
         }

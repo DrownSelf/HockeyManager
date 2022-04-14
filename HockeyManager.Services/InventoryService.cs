@@ -8,6 +8,8 @@ namespace HockeyManager.Services
     {
         private readonly IInventoryRepository _inventoryRepository;
 
+        public IEnumerable<Inventory> Inventory { get => _inventoryRepository.Entities; }
+
         public InventoryService(IInventoryRepository inventoryRepository)
         {
             _inventoryRepository = inventoryRepository;
@@ -24,6 +26,7 @@ namespace HockeyManager.Services
                 NameOfAccessory = createInventoryRequest.NameOfAccessory,
                 TypeOfAccessory = createInventoryRequest.TypeOfAccessory
             };
+
             var result = _inventoryRepository.CreateAsync(newInventory);
             if(!result)
                 return false;

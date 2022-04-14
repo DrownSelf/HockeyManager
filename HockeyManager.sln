@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HockeyManager.Tests", "Hock
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{88B3451C-B3BB-4C58-87DD-B991BABFB6A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager.Services", "HockeyManager.Services\HockeyManager.Services.csproj", "{BF95124C-30A1-422B-9871-4AC0644D39D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HockeyManager.Services", "HockeyManager.Services\HockeyManager.Services.csproj", "{BF95124C-30A1-422B-9871-4AC0644D39D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager.Models", "HockeyManager.Models\HockeyManager.Models.csproj", "{19A2E606-B3EF-4E04-8155-7888CFFF1A66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HockeyManager.Models", "HockeyManager.Models\HockeyManager.Models.csproj", "{19A2E606-B3EF-4E04-8155-7888CFFF1A66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyManager.APIs", "HockeyManager.APIs\HockeyManager.APIs.csproj", "{715BD4D1-4FDC-4DEB-90ED-73A833A4943B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19A2E606-B3EF-4E04-8155-7888CFFF1A66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{715BD4D1-4FDC-4DEB-90ED-73A833A4943B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{715BD4D1-4FDC-4DEB-90ED-73A833A4943B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{715BD4D1-4FDC-4DEB-90ED-73A833A4943B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{715BD4D1-4FDC-4DEB-90ED-73A833A4943B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

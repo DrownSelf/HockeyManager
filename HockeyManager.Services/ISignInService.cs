@@ -1,10 +1,4 @@
-﻿using HockeyManager.DataLayer;
-using HockeyManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HockeyManager.Models;
 
 namespace HockeyManager.Services
 {

@@ -1,0 +1,40 @@
+﻿@model CreateInventoryRequest
+<div>
+    <form method="post" asp-controller="Engineer" asp-action="AddItem">
+        <div>
+            <label asp-for="NameOfAccessory"></label>
+            <input asp-for="NameOfAccessory" />
+            <span asp-validation-for="NameOfAccessory"></span>
+        </div>
+
+        <div>
+            <label asp-for="TypeOfAccessory"></label>
+            <select asp-for="TypeOfAccessory">
+                <option value="Stick">Stick</option>
+                <option value="Helmet">Helmet</option>
+                <option value="Puck">Puck</option>
+                <option value="Skates">Skates</option>
+                <option value="Defend Amunition">Internal Amunition</option>
+            </select>
+            <span asp-validation-for="TypeOfAccessory"></span>
+        </div>
+
+        <div>
+            <label asp-for="USDCost"></label>
+            <input asp-for="USDCost" />
+            <span asp-validation-for="USDCost"></span>
+        </div>
+
+        <div>
+            <label asp-for="DataOfLastMaintain"></label>
+            <select asp-for="DataOfLastMaintain.Day"></select>
+            <select asp-for="DataOfLastMaintain.Month"></select>
+            <select asp-for="DataOfLastMaintain.Year"></select>
+            <span asp-validation-for="DataOfLastMaintain"></span>
+        </div>
+
+        <div>
+            <input type="submit" value="Create User" />
+        </div>
+    </form>
+</div>

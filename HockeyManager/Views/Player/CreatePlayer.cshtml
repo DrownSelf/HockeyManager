@@ -1,0 +1,39 @@
+﻿@model CreatePlayerRequest
+<h2>Create Player</h2>
+<div>
+    <form method="post" asp-controller="Employee" asp-action="Create">
+        <div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div>
+            <label asp-for="Surname"></label>
+            <input asp-for="Surname" />
+            <span asp-validation-for="Surname"></span>
+        </div>
+
+        <div>
+            <label asp-for="Position"></label>
+            <select asp-for="Position">
+                <option value="Center Forward">Center forward</option>
+                <option value="Left Winger">Left winger</option>
+                <option value="Right Winger">Right winger</option>
+                <option value="Defenseman">Defenseman</option>
+                <option value="Goalie">Goalie</option>
+            </select>
+            <span asp-validation-for="Position"></span>
+        </div>
+
+        <div>
+            <label asp-for="Captain"></label>
+            <input asp-for="Captain" />
+            <span asp-validation-for="Captain"></span>
+        </div>
+
+        <div>
+            <input type="submit" value="Create User" />
+        </div>
+    </form>
+</div>
